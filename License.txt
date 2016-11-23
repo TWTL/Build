@@ -1,0 +1,9 @@
+TWTL 1.0 Software End User License
+
+The TWTL project aims to be the world's best all-round total security solution. This is the first release and congratulations on your use.
+
+By using this software product, you agree in these terms.
+
+1. This software is provided WITHOUT ANY WARRANTY. EVER.
+
+You can browse source code and documentation in https://github.com/TWTL.
