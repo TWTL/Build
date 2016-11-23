@@ -1,0 +1,9 @@
+[submodule "Documentation"]
+	path = Documentation
+	url = https://github.com/TWTL/Documentation
+[submodule "Engine"]
+	path = Engine
+	url = https://github.com/TWTL/Engine
+[submodule "GUI"]
+	path = GUI
+	url = https://github.com/TWTL/GUI
