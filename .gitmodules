@@ -7,3 +7,6 @@
 [submodule "GUI"]
 	path = GUI
 	url = https://github.com/TWTL/GUI
+[submodule "Service"]
+	path = Service
+	url = https://github.com/TWTL/Service
