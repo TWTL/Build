@@ -1,7 +1,9 @@
 ; TWTL Installer NSIS Script
+
+; inclusion and definitions
 !include "MUI2.nsh"
 
-!define ORGNAME "Notresponding"
+!define ORGNAME "NOTRESPONDING"
 !define APPNAME "TWTL"
 !define VERSION_MAJOR 1
 !define VERSION_MINOR 0
@@ -11,12 +13,19 @@ Unicode True
 !define INST_SERVICE_EXEC_NAME "twtlsvc.exe"
 !define INST_ENGINE_EXEC_NAME "twtleng.exe"
 !define INST_GUI_EXEC_NAME "twtlgui.exe"
+!define INST_UNINST_EXEC_NAME "uninstall.exe"
 
 ; Edit these lines so each of them is correct path to executable on input
 !define BUILD_SERVICE_EXEC_PATH "Service\?"
 !define BUILD_ENGINE_EXEC_PATH "Engine\?"
 !define BUILD_GUI_EXEC_PATH "GUI\?"
 
+!define REG_KEY_INST_INFO \
+  "Software\${ORGNAME}\${APPNAME}"
+!define REG_KEY_UNINST_INFO \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
+
+; Beginning of installer description
 Name "${APPNAME}"
 OutFile "TWTLInstaller.exe"
 
@@ -46,34 +55,52 @@ Section
   SetOutPath $InstDir
   CreateDirectory $InstDir
   File License.txt
-  File /oname="${INST_ENGINE_EXEC_PATH}" "${BUILD_ENGINE_EXEC_PATH}"
-  File /oname="${INST_GUI_EXEC_PATH}"  "${BUILD_GUI_EXEC_PATH}"
-  ; Uninstaller generation and registry uninstallation information
-  WriteUninstaller $InstDir\uninstall.exe
+  File /oname=${INST_SERVICE_EXEC_NAME} "${BUILD_SERVICE_EXEC_PATH}"
+  File /oname=${INST_ENGINE_EXEC_NAME} "${BUILD_ENGINE_EXEC_PATH}"
+  File /oname=${INST_GUI_EXEC_NAME} "${BUILD_GUI_EXEC_PATH}"
+  ; Registry installation
   WriteRegStr HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
+    "${REG_KEY_INST_INFO}" \
+    "SvcPath" "$InstDir\${INST_SERVICE_EXEC_NAME}"
+  WriteRegStr HKLM \
+    "${REG_KEY_INST_INFO}" \
+    "EnginePath" "$InstDir\${INST_ENGINE_EXEC_NAME}"
+  WriteRegStr HKLM \
+    "${REG_KEY_INST_INFO}" \
+    "GUIPath" "$InstDir\${INST_GUI_EXEC_NAME}"
+  ; Service installation and startup
+  Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Install'
+  Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Start'
+  ; Uninstaller generation and registry uninstallation information
+  WriteUninstaller "$InstDir\${INST_UNINST_EXEC_NAME}"
+  WriteRegStr HKLM \
+    "${REG_KEY_UNINST_INFO}" \
     "DisplayName" "${APPNAME}"
   WriteRegStr HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
+    "${REG_KEY_UNINST_INFO}" \
     "Publisher" "${ORGNAME}"
   WriteRegStr HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
-    "UninstallString" "$\"$InstDir\uninstall.exe$\""
+    "${REG_KEY_UNINST_INFO}" \
+    "UninstallString" "$\"$InstDir\${INST_UNINST_EXEC_NAME}$\""
   WriteRegDWORD HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
+    "${REG_KEY_UNINST_INFO}" \
     "VersionMajor" ${VERSION_MAJOR}
   WriteRegDWORD HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
+    "${REG_KEY_UNINST_INFO}" \
     "VersionMinor" ${VERSION_MINOR}
 SectionEnd
 
 Section "Uninstall"
+  Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Stop'
+  Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Uninstall'
   Delete $InstDir\License.txt
-  ;Delete $InstDir\twtlsvc.exe
-  Delete $InstDir\twtlngin.exe
-  Delete $InstDir\twtlgui.exe
-  Delete $InstDir\uninstall.exe
+  Delete "$InstDir\${INST_SERVICE_EXEC_NAME}"
+  Delete "$InstDir\${INST_ENGINE_EXEC_NAME}"
+  Delete "$InstDir\${INST_GUI_EXEC_NAME}"
+  Delete "$InstDir\${INST_UNINST_EXEC_NAME}"
   RmDir $InstDir
   DeleteRegKey HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
+    "${REG_KEY_INST_INFO}"
+  DeleteRegKey HKLM \
+    "${REG_KEY_UNINST_INFO}"
 SectionEnd
