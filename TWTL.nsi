@@ -2,7 +2,7 @@
 
 ; inclusion and definitions
 !include "MUI2.nsh"
-!include ".\TWTL.files.nsh"
+!include ".\TWTL.defs.Files.nsh"
 
 !define ORGNAME "NOTRESPONDING"
 !define APPNAME "TWTL"
