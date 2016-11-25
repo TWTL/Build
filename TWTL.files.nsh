@@ -7,15 +7,16 @@
 !define INST_ENGINE_DLL1_NAME "TWTL_Snapshot.dll"
 !define INST_ENGINE_DLL2_NAME "TWTL_Database.dll"
 !define INST_GUI_EXEC_NAME "twtlgui.exe"
+!define INST_GUI_DATA_NAME "twtlgui_Data"
 !define INST_UNINST_EXEC_NAME "uninstall.exe"
 
 ; Edit these lines so each of them is correct path to executable on input
-!define BUILD_SERVICE_EXEC_PATH "C:\Users\VM\Desktop\project\install\Build\Service\TWTLService\Release\TWTLService.exe"
-!define BUILD_ENGINE_EXEC_PATH "C:\Users\VM\Desktop\project\install\Build\Engine\Project\Release\TWTL_Main.exe"
-!define BUILD_ENGINE_DLL1_PATH "C:\Users\VM\Desktop\project\install\Build\Engine\Project\Release\TWTL_Snapshot.dll"
-!define BUILD_ENGINE_DLL2_PATH "C:\Users\VM\Desktop\project\install\Build\Engine\Project\Release\TWTL_Database.dll"
-!define BUILD_GUI_EXEC_PATH "C:\Users\VM\Desktop\project\install\Build\GUI\TWTL_UnityGUI\gui.exe"
-!define BUILD_GUI_DATA_PATH "C:\Users\VM\Desktop\project\install\Build\GUI\TWTL_UnityGUI\gui_Data\"
+!define BUILD_SERVICE_EXEC_PATH "Service\?"
+!define BUILD_ENGINE_EXEC_PATH "Engine\?"
+!define BUILD_ENGINE_DLL1_PATH "Engine\?"
+!define BUILD_ENGINE_DLL2_PATH "Engine\?"
+!define BUILD_GUI_EXEC_PATH "GUI\?"
+!define BUILD_GUI_DATA_PATH "GUI\?"
 
 ; Example: uncomment lines below and comment lines above
 ; !define BUILD_SERVICE_EXEC_PATH "Service\TWTLService\Release\TWTLService.exe"

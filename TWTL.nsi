@@ -44,7 +44,7 @@ Section
   ; File installation
   SetOutPath $InstDir
   CreateDirectory $InstDir
-  SetOutPath $InstDir\"twtlgui_Data"
+  SetOutPath $InstDir\"${INST_GUI_DATA_NAME}"
   File /nonfatal /a /r "${BUILD_GUI_DATA_PATH}"
   SetOutPath $InstDir
   File License.txt
