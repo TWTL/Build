@@ -12,13 +12,26 @@ Unicode True
 ; Edit these lines so each of them is correct filename of executable for output
 !define INST_SERVICE_EXEC_NAME "twtlsvc.exe"
 !define INST_ENGINE_EXEC_NAME "twtleng.exe"
+!define INST_ENGINE_DLL1_NAME "TWTL_Snapshot.dll"
+!define INST_ENGINE_DLL2_NAME "TWTL_Database.dll"
 !define INST_GUI_EXEC_NAME "twtlgui.exe"
 !define INST_UNINST_EXEC_NAME "uninstall.exe"
 
 ; Edit these lines so each of them is correct path to executable on input
-!define BUILD_SERVICE_EXEC_PATH "Service\?"
-!define BUILD_ENGINE_EXEC_PATH "Engine\?"
-!define BUILD_GUI_EXEC_PATH "GUI\?"
+!define BUILD_SERVICE_EXEC_PATH "C:\Users\VM\Desktop\project\install\Build\Service\TWTLService\Release\TWTLService.exe"
+!define BUILD_ENGINE_EXEC_PATH "C:\Users\VM\Desktop\project\install\Build\Engine\Project\Release\TWTL_Main.exe"
+!define BUILD_ENGINE_DLL1_PATH "C:\Users\VM\Desktop\project\install\Build\Engine\Project\Release\TWTL_Snapshot.dll"
+!define BUILD_ENGINE_DLL2_PATH "C:\Users\VM\Desktop\project\install\Build\Engine\Project\Release\TWTL_Database.dll"
+!define BUILD_GUI_EXEC_PATH "C:\Users\VM\Desktop\project\install\Build\GUI\TWTL_UnityGUI\gui.exe"
+!define BUILD_GUI_DATA_PATH "C:\Users\VM\Desktop\project\install\Build\GUI\TWTL_UnityGUI\gui_Data\"
+
+; Example: uncomment lines below
+; !define BUILD_SERVICE_EXEC_PATH "Service\TWTLService\Release\TWTLService.exe"
+; !define BUILD_ENGINE_EXEC_PATH "Engine\Project\Release\TWTL_Main.exe"
+; !define BUILD_ENGINE_DLL1_PATH "Engine\Project\Release\TWTL_Snapshot.dll"
+; !define BUILD_ENGINE_DLL2_PATH "Engine\Project\Release\TWTL_Database.dll"
+; !define BUILD_GUI_EXEC_PATH "GUI\TWTL_UnityGUI\gui.exe"
+; !define BUILD_GUI_DATA_PATH "GUI\TWTL_UnityGUI\gui_Data\"
 
 !define REG_KEY_INST_INFO \
   "Software\${ORGNAME}\${APPNAME}"
@@ -54,9 +67,14 @@ Section
   ; File installation
   SetOutPath $InstDir
   CreateDirectory $InstDir
+  SetOutPath $InstDir\"twtlgui_Data"
+  File /nonfatal /a /r "${BUILD_GUI_DATA_PATH}"
+  SetOutPath $InstDir
   File License.txt
   File /oname=${INST_SERVICE_EXEC_NAME} "${BUILD_SERVICE_EXEC_PATH}"
   File /oname=${INST_ENGINE_EXEC_NAME} "${BUILD_ENGINE_EXEC_PATH}"
+  File /oname=${INST_ENGINE_DLL1_NAME} "${BUILD_ENGINE_DLL1_PATH}"
+  File /oname=${INST_ENGINE_DLL2_NAME} "${BUILD_ENGINE_DLL2_PATH}"
   File /oname=${INST_GUI_EXEC_NAME} "${BUILD_GUI_EXEC_PATH}"
   ; Registry installation
   WriteRegStr HKLM \
@@ -93,11 +111,19 @@ SectionEnd
 Section "Uninstall"
   Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Stop'
   Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Uninstall'
+  sleep 1000
   Delete $InstDir\License.txt
-  Delete "$InstDir\${INST_SERVICE_EXEC_NAME}"
   Delete "$InstDir\${INST_ENGINE_EXEC_NAME}"
   Delete "$InstDir\${INST_GUI_EXEC_NAME}"
   Delete "$InstDir\${INST_UNINST_EXEC_NAME}"
+  Delete "$InstDir\${INST_ENGINE_DLL1_NAME}"
+  Delete "$InstDir\${INST_ENGINE_DLL2_NAME}"
+  Delete "$InstDir\${INST_SERVICE_EXEC_NAME}"
+  Delete "$InstDir\twtlgui_Data\*.*"
+  Delete "$InstDir\twtlgui_Data\Managed\*.*"
+  Delete "$InstDir\twtlgui_Data\Mono\*.*"
+  Delete "$InstDir\twtlgui_Data\Resources\*.*"
+  Rmdir /R "$InstDir\twtlgui_Data"
   RmDir $InstDir
   DeleteRegKey HKLM \
     "${REG_KEY_INST_INFO}"
