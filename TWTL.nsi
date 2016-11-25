@@ -3,6 +3,7 @@
 ; inclusion and definitions
 !include "MUI2.nsh"
 !include ".\TWTL.defs.Files.nsh"
+!include ".\TWTL.macro.RemoveFilesAndSubDirs.nsh"
 
 !define ORGNAME "NOTRESPONDING"
 !define APPNAME "TWTL"
@@ -11,7 +12,7 @@
 Unicode True
 
 !define REG_KEY_INST_INFO \
-  "Software\${ORGNAME}\${APPNAME}"
+  "Software\${APPNAME}"
 !define REG_KEY_UNINST_INFO \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 
@@ -19,7 +20,7 @@ Unicode True
 Name "${APPNAME}"
 OutFile "TWTLInstaller.exe"
 
-InstallDir "$ProgramFiles\${ORGNAME}\${APPNAME}"
+InstallDir "$ProgramFiles\${APPNAME}"
 ShowInstDetails Show
 XPStyle On
 RequestExecutionLevel Admin
@@ -44,15 +45,14 @@ Section
   ; File installation
   SetOutPath $InstDir
   CreateDirectory $InstDir
-  SetOutPath $InstDir\"${INST_GUI_DATA_NAME}"
-  File /nonfatal /a /r "${BUILD_GUI_DATA_PATH}"
-  SetOutPath $InstDir
   File License.txt
   File /oname=${INST_SERVICE_EXEC_NAME} "${BUILD_SERVICE_EXEC_PATH}"
   File /oname=${INST_ENGINE_EXEC_NAME} "${BUILD_ENGINE_EXEC_PATH}"
   File /oname=${INST_ENGINE_DLL1_NAME} "${BUILD_ENGINE_DLL1_PATH}"
   File /oname=${INST_ENGINE_DLL2_NAME} "${BUILD_ENGINE_DLL2_PATH}"
   File /oname=${INST_GUI_EXEC_NAME} "${BUILD_GUI_EXEC_PATH}"
+  SetOutPath $InstDir\"${INST_GUI_DATA_NAME}"
+  File /nonfatal /a /r "${BUILD_GUI_DATA_PATH}"
   ; Registry installation
   WriteRegStr HKLM \
     "${REG_KEY_INST_INFO}" \
@@ -86,22 +86,14 @@ Section
 SectionEnd
 
 Section "Uninstall"
+  ; Stop and delete service
   Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Stop'
   Exec '"$InstDir\${INST_SERVICE_EXEC_NAME}" Uninstall'
-  sleep 1000
-  Delete $InstDir\License.txt
-  Delete "$InstDir\${INST_ENGINE_EXEC_NAME}"
-  Delete "$InstDir\${INST_GUI_EXEC_NAME}"
-  Delete "$InstDir\${INST_UNINST_EXEC_NAME}"
-  Delete "$InstDir\${INST_ENGINE_DLL1_NAME}"
-  Delete "$InstDir\${INST_ENGINE_DLL2_NAME}"
-  Delete "$InstDir\${INST_SERVICE_EXEC_NAME}"
-  Delete "$InstDir\twtlgui_Data\*.*"
-  Delete "$InstDir\twtlgui_Data\Managed\*.*"
-  Delete "$InstDir\twtlgui_Data\Mono\*.*"
-  Delete "$InstDir\twtlgui_Data\Resources\*.*"
-  Rmdir /R "$InstDir\twtlgui_Data"
+  sleep 1000 ; stand for service really removed
+  ; Uninstall files
+  !insertmacro RemoveFilesAndSubDirs "$InstDir"
   RmDir $InstDir
+  ; Uninstall registry
   DeleteRegKey HKLM \
     "${REG_KEY_INST_INFO}"
   DeleteRegKey HKLM \
