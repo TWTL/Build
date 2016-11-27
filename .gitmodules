@@ -10,3 +10,6 @@
 [submodule "Service"]
 	path = Service
 	url = https://github.com/TWTL/Service
+[submodule "TestSuite"]
+	path = TestSuite
+	url = https://github.com/TWTL/TestSuite
