@@ -11,12 +11,12 @@
 !define INST_UNINST_EXEC_NAME "uninstall.exe"
 
 ; Edit these lines so each of them is correct path to executable on input
-!define BUILD_SERVICE_EXEC_PATH "Service\?"
-!define BUILD_ENGINE_EXEC_PATH "Engine\?"
-!define BUILD_ENGINE_DLL1_PATH "Engine\?"
-!define BUILD_ENGINE_DLL2_PATH "Engine\?"
-!define BUILD_GUI_EXEC_PATH "GUI\?"
-!define BUILD_GUI_DATA_PATH "GUI\?"
+!define BUILD_SERVICE_EXEC_PATH "Service\TWTLService.exe"
+!define BUILD_ENGINE_EXEC_PATH "Engine\TWTL_Main.exe"
+!define BUILD_ENGINE_DLL1_PATH "Engine\TWTL_Snapshot.dll"
+!define BUILD_ENGINE_DLL2_PATH "Engine\TWTL_Database.dll"
+!define BUILD_GUI_EXEC_PATH "GUI\TWTL_GUI.exe"
+!define BUILD_GUI_DATA_PATH "GUI\TWTL_GUI_Data\"
 
 ; Example: uncomment lines below and comment lines above
 ; !define BUILD_SERVICE_EXEC_PATH "Service\TWTLService\Release\TWTLService.exe"
